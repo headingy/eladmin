@@ -17,11 +17,14 @@ package me.zhengjie.modules.system.rest;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.system.domain.Job;
 import me.zhengjie.modules.system.service.JobService;
+import me.zhengjie.modules.system.service.dto.JobDto;
 import me.zhengjie.modules.system.service.dto.JobQueryCriteria;
 import me.zhengjie.utils.ThrowableUtil;
 import org.springframework.data.domain.Pageable;
@@ -48,6 +51,7 @@ public class JobController {
     private static final String ENTITY_NAME = "job";
 
     @ApiOperation("导出岗位数据")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "jobDto", responseContainer = "List", response = JobDto.class)})
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('job:list')")
     public void download(HttpServletResponse response, JobQueryCriteria criteria) throws IOException {
