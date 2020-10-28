@@ -1,0 +1,112 @@
+/*
+*  Copyright 2019-2020 Zheng Jie
+*
+*  Licensed under the Apache License, Version 2.0 (the "License");
+*  you may not use this file except in compliance with the License.
+*  You may obtain a copy of the License at
+*
+*  http://www.apache.org/licenses/LICENSE-2.0
+*
+*  Unless required by applicable law or agreed to in writing, software
+*  distributed under the License is distributed on an "AS IS" BASIS,
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*  See the License for the specific language governing permissions and
+*  limitations under the License.
+*/
+package me.zhengjie.modules.mskj.service.dto;
+
+import lombok.Data;
+import java.io.Serializable;
+
+/**
+* @website https://el-admin.vip
+* @description /
+* @author Fu Ding
+* @date 2020-10-27
+**/
+@Data
+public class RobotDto implements Serializable {
+
+    private String robotId;
+
+    /** 机器人编号 */
+    private String robotNo;
+
+    /** 机器人名称 */
+    private String name;
+
+    /** 机器人运行状态 */
+    private Integer actionStatus;
+
+    /** 机器人当前运行模式（0任务模式，1紧急定位模式，2后台遥控模式，3手持遥控模式，4正在充电） */
+    private Integer mode;
+
+    /** 机器人连接状态（0表示未连接，1表示已连接） */
+    private Integer connectStatus;
+
+    /** 机器人位置信息 */
+    private String location;
+
+    /** 机器人安全证书 */
+    private String auth;
+
+    /** 剩余电量 */
+    private Float power;
+
+    /** 描述 */
+    private String description;
+
+    /** 四驱状态(1,0,1,0) */
+    private String driverStatus;
+
+    /** 车速 */
+    private Float speed;
+
+    /** 网络信号值 */
+    private Float net;
+
+    /** 传感器设备状态 */
+    private String devicesStatus;
+
+    /** 可见光通道 */
+    private Integer channelLight;
+
+    /** 热红外通道 */
+    private Integer channelInfrared;
+
+    /** 当前是否受控（默认0是，1否） */
+    private Integer control;
+
+    /** 机体ip */
+    private String robotIp;
+
+    /** 可见光视频ip */
+    private String lightIp;
+
+    /** 热红外视频ip */
+    private String infraredIp;
+
+    /** 可见光端口 */
+    private String lightPort;
+
+    /** 热红外端口 */
+    private String infraredPort;
+
+    /** 可见光用户名 */
+    private String lightName;
+
+    /** 热红外用户名 */
+    private String infraredName;
+
+    /** 可见光密码 */
+    private String lightPassword;
+
+    /** 热红外密码 */
+    private String infraredPassword;
+
+    /** 0代表巡检，1代表人脸识别 */
+    private String faceRecognition;
+
+    /** 地图ID */
+    private String mapId;
+}
