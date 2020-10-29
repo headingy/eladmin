@@ -30,4 +30,7 @@ import me.zhengjie.annotation.Query;
 public class WarnInfoQueryCriteria{
     @Query(type = Query.Type.GREATER_THAN)
     private Timestamp createTime;
+
+    @Query(type = Query.Type.EQUAL)
+    private Integer infoType;
 }
