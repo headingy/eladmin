@@ -37,6 +37,7 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import java.nio.charset.Charset;
@@ -83,6 +84,22 @@ public class RedisConfig extends CachingConfigurerSupport {
         ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
         // 建议使用这种方式，小范围指定白名单
         // ParserConfig.getGlobalInstance().addAccept("me.zhengjie.domain");
+        // key的序列化采用StringRedisSerializer
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setConnectionFactory(redisConnectionFactory);
+        return template;
+    }
+
+    @SuppressWarnings("all")
+    @Bean(name = "redisOldTemplate")
+    @ConditionalOnMissingBean(name = "redisOldTemplate")
+    public RedisTemplate<Object, Object> redisOldTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<Object, Object> template = new RedisTemplate<>();
+        //序列化
+        JdkSerializationRedisSerializer jdkSerializationRedisSerializer = new JdkSerializationRedisSerializer();
+        template.setValueSerializer(jdkSerializationRedisSerializer);
+        template.setHashValueSerializer(jdkSerializationRedisSerializer);
         // key的序列化采用StringRedisSerializer
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
