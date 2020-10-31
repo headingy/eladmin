@@ -39,16 +39,15 @@ public class TaskReportServiceImpl implements TaskReportService {
         RobotTaskDto robotTask = robotTaskService.findById(robotTaskId);
         TaskDto task = taskService.findById(robotTask.getTaskId());
         report.setTaskId(task.getTaskId()).setName(task.getName()).setCreator(task.getCreater());
-        DecimalFormat df = new DecimalFormat("0.00");
 
-//        String[] deviceIds = task.getDevices().split(",");
-        int count = 0;
-        int abnormals = 0;
+        int numDevices = 0;
+        int numAbnormals = 0;
         //告警设备
         List<String> warnDevices = new ArrayList<>();
         List<DevicePic> pics = new ArrayList<>();
         List<DevicePic> infraReds = new ArrayList<>();
         List<DevicePic> needles = new ArrayList<>();
+        DecimalFormat df = new DecimalFormat("0.00");
         List<RobotTaskDeviceDto> deviceDtos = robotTaskDeviceService.queryAll(
                 new RobotTaskDeviceQueryCriteria().robotTaskId(robotTaskId));
         for (RobotTaskDeviceDto deviceDto : deviceDtos) {
@@ -56,14 +55,14 @@ public class TaskReportServiceImpl implements TaskReportService {
             if (device == null) continue;
             report.setInspectType(device.getInspectType());
             if (device.getThreePhase() == 0) {
-                count += 3;
+                numDevices += 3;
             } else if (device.getThreePhase() == 1) {
-                count += 1;
+                numDevices += 1;
             }
             String value = String.valueOf(deviceDto.getResult()).trim();
             for (int j = 0; j < value.length(); j++) {
                 if (value.charAt(j) == '1') {
-                    abnormals += 1;
+                    numAbnormals += 1;
                 }
             }
             if (value.equals("1")) {
@@ -85,7 +84,7 @@ public class TaskReportServiceImpl implements TaskReportService {
                 }
             }
             pics.add(pic);
-            if ( device.getInspectType().equals("1")) {
+            if (device.getInspectType().equals("1")) {
                 //热红外数据
                 DevicePic infra = new DevicePic();
                 infra.setDeviceName(device.getDeviceName());
@@ -99,7 +98,7 @@ public class TaskReportServiceImpl implements TaskReportService {
                     infra.setResult("异常");
                 }
                 infraReds.add(infra);
-            } else if (device.getInspectType().equals("3") || device.getInspectType().equals("4")){
+            } else if (device.getInspectType().equals("3") || device.getInspectType().equals("4")) {
                 //仪表数据
                 DevicePic needle = new DevicePic();
                 needle.setDeviceName(device.getDeviceName());
@@ -112,16 +111,24 @@ public class TaskReportServiceImpl implements TaskReportService {
                 needles.add(needle);
             }
         }
-        report.setWarnDevices(warnDevices).setDevicePics(pics).setInfraReds(infraReds).setNeedles(needles);
+        if (numDevices <= 0) return report;
         //设备数
-        report.setNumDevices(count);
+        report.setNumDevices(numDevices);
         //异常设备数
-        report.setAbnormals(abnormals);
+        report.setAbnormals(numAbnormals);
+
+        if (warnDevices.size() > 0) report.setWarnDevices(warnDevices);
+        if (pics.size() > 0) report.setDevicePics(pics);
+        if (infraReds.size() > 0) report.setInfraReds(infraReds);
+        if (needles.size() > 0) report.setNeedles(needles);
+
         //异常率
-        NumberFormat numberFormat = NumberFormat.getInstance();
-        numberFormat.setMaximumFractionDigits(0);
-        String rate = numberFormat.format((float) (report.getAbnormals()) / (float) report.getNumDevices() * 100);
-        report.setAbnormalRate(rate + "%");
+        if (numAbnormals>0) {
+            NumberFormat numberFormat = NumberFormat.getInstance();
+            numberFormat.setMaximumFractionDigits(0);
+            String rate = numberFormat.format((float) (report.getAbnormals()) / (float) report.getNumDevices() * 100);
+            report.setAbnormalRate(rate + "%");
+        }
 
         //环境数据
         List<EnvironmentDto> envs = environmentService.queryAll(new EnvironmentQueryCriteria().robotTaskId(robotTaskId));
