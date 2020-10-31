@@ -16,8 +16,10 @@
 package me.zhengjie.modules.mskj.service.dto;
 
 import lombok.Data;
-import java.util.List;
 import me.zhengjie.annotation.Query;
+
+import java.sql.Timestamp;
+import java.util.List;
 
 /**
 * @website https://el-admin.vip
@@ -26,4 +28,9 @@ import me.zhengjie.annotation.Query;
 **/
 @Data
 public class TaskQueryCriteria{
+    @Query(type = Query.Type.BETWEEN)
+    private List<Timestamp> execTime;
+
+    @Query(type = Query.Type.IN)
+    private List<Integer> status;
 }

@@ -37,7 +37,7 @@ public class TaskReportServiceImpl implements TaskReportService {
     public TaskReportDto getTaskReport(String robotTaskId) {
         TaskReportDto report = new TaskReportDto();
         RobotTaskDto robotTask = robotTaskService.findById(robotTaskId);
-        TaskDto task = taskService.findById(robotTask.getTaskId());
+        TaskDto task = taskService.findById(robotTask.getTask().getTaskId());
         report.setTaskId(task.getTaskId()).setName(task.getName()).setCreator(task.getCreater());
 
         int numDevices = 0;
