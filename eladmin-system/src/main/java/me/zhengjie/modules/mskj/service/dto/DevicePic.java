@@ -1,12 +1,14 @@
 package me.zhengjie.modules.mskj.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public
-class DevicePic implements Serializable {
+@JsonInclude(Include.NON_NULL)
+public class DevicePic implements Serializable {
     //设备id
     private String deviceId;
     //设备名称
