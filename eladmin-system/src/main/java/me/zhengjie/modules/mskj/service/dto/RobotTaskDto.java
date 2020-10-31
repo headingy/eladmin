@@ -34,7 +34,10 @@ public class RobotTaskDto implements Serializable {
     private String robotId;
 
     /** 任务id */
-    private String taskId;
+//    private String taskId;
+
+    /** 任务 */
+    private TaskDto task;
 
     /** 原执行时间 */
     private String oldExecTime;

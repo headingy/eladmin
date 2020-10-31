@@ -15,28 +15,29 @@
 */
 package me.zhengjie.modules.mskj.service.impl;
 
-import me.zhengjie.modules.mskj.domain.RobotTask;
-import me.zhengjie.utils.ValidationUtil;
-import me.zhengjie.utils.FileUtil;
+import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
+import me.zhengjie.modules.mskj.domain.RobotTask;
 import me.zhengjie.modules.mskj.repository.RobotTaskRepository;
 import me.zhengjie.modules.mskj.service.RobotTaskService;
 import me.zhengjie.modules.mskj.service.dto.RobotTaskDto;
 import me.zhengjie.modules.mskj.service.dto.RobotTaskQueryCriteria;
 import me.zhengjie.modules.mskj.service.mapstruct.RobotTaskMapper;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import cn.hutool.core.util.IdUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
-import java.util.List;
-import java.util.Map;
-import java.io.IOException;
+import me.zhengjie.utils.ValidationUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @website https://el-admin.vip
@@ -99,7 +100,7 @@ public class RobotTaskServiceImpl implements RobotTaskService {
         for (RobotTaskDto robotTask : all) {
             Map<String,Object> map = new LinkedHashMap<>();
             map.put("机器人id", robotTask.getRobotId());
-            map.put("任务id", robotTask.getTaskId());
+            map.put("任务", robotTask.getTask());
             map.put("原执行时间", robotTask.getOldExecTime());
             map.put("执行时间", robotTask.getExecTime());
             map.put("执行状态（默认0表示待执行，1表示正在执行，2表示已完成，3表示已终止，4表示不执行，5暂停）", robotTask.getExecStatus());
