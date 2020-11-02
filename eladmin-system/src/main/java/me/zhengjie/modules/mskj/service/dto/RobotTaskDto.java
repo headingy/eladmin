@@ -30,11 +30,8 @@ public class RobotTaskDto implements Serializable {
     /** 主键 */
     private String robotTaskId;
 
-    /** 机器人id */
-    private String robotId;
-
-    /** 任务id */
-//    private String taskId;
+    /** 机器人 */
+    private RobotDto robot;
 
     /** 任务 */
     private TaskDto task;

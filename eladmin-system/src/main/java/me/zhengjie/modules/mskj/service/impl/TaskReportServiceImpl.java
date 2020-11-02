@@ -1,6 +1,7 @@
 package me.zhengjie.modules.mskj.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import me.zhengjie.modules.mskj.common.DeviceInspectType;
 import me.zhengjie.modules.mskj.service.*;
 import me.zhengjie.modules.mskj.service.dto.*;
 import org.springframework.stereotype.Service;
@@ -37,8 +38,13 @@ public class TaskReportServiceImpl implements TaskReportService {
     public TaskReportDto getTaskReport(String robotTaskId) {
         TaskReportDto report = new TaskReportDto();
         RobotTaskDto robotTask = robotTaskService.findById(robotTaskId);
-        TaskDto task = taskService.findById(robotTask.getTask().getTaskId());
-        report.setTaskId(task.getTaskId()).setName(task.getName()).setCreator(task.getCreater());
+//        TaskDto task = taskService.findById(robotTask.getTask().getTaskId());
+        report.setTaskId(robotTask.getTask().getTaskId())
+                .setName(robotTask.getTask().getName())
+                .setCreator(robotTask.getTask().getCreater())
+                .setExecTime(robotTask.getExecTime())
+                .setOverTime(robotTask.getEndTime())
+                .setRobotName(robotTask.getRobot().getName());
 
         int numDevices = 0;
         int numAbnormals = 0;
@@ -53,7 +59,9 @@ public class TaskReportServiceImpl implements TaskReportService {
         for (RobotTaskDeviceDto deviceDto : deviceDtos) {
             DeviceDto device = deviceService.findById(deviceDto.getDeviceId());
             if (device == null) continue;
-            report.setInspectType(device.getInspectType());
+            if (report.getInspectType() == null) {
+                report.setInspectType(DeviceInspectType.values()[device.getInspectType()].getName());
+            }
             if (device.getThreePhase() == 0) {
                 numDevices += 3;
             } else if (device.getThreePhase() == 1) {
@@ -77,14 +85,14 @@ public class TaskReportServiceImpl implements TaskReportService {
                 if (media == null) continue;
                 if (media.getType().equals(0) && media.getMediaType().equals("0")) {
                     pic.setLightPic(media.getPath());
-                    if (device.getInspectType().equals("1")
+                    if (device.getInspectType() == DeviceInspectType.LIGHT_INFRARED.ordinal()
                             && media.getType().equals(1) && media.getMediaType().equals("0")) {
                         pic.setInfraredPic(media.getPath());
                     }
                 }
             }
             pics.add(pic);
-            if (device.getInspectType().equals("1")) {
+            if (device.getInspectType() == DeviceInspectType.LIGHT_INFRARED.ordinal()) {
                 //热红外数据
                 DevicePic infra = new DevicePic();
                 infra.setDeviceName(device.getDeviceName());
@@ -98,7 +106,8 @@ public class TaskReportServiceImpl implements TaskReportService {
                     infra.setResult("异常");
                 }
                 infraReds.add(infra);
-            } else if (device.getInspectType().equals("3") || device.getInspectType().equals("4")) {
+            } else if (device.getInspectType() == DeviceInspectType.POSITION_STATUS.ordinal()
+                    || device.getInspectType() == DeviceInspectType.NEEDLE.ordinal()) {
                 //仪表数据
                 DevicePic needle = new DevicePic();
                 needle.setDeviceName(device.getDeviceName());
@@ -123,7 +132,7 @@ public class TaskReportServiceImpl implements TaskReportService {
         if (needles.size() > 0) report.setNeedles(needles);
 
         //异常率
-        if (numAbnormals>0) {
+        if (numAbnormals > 0) {
             NumberFormat numberFormat = NumberFormat.getInstance();
             numberFormat.setMaximumFractionDigits(0);
             String rate = numberFormat.format((float) (report.getAbnormals()) / (float) report.getNumDevices() * 100);

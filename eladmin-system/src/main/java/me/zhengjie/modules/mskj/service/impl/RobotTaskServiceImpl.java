@@ -99,7 +99,7 @@ public class RobotTaskServiceImpl implements RobotTaskService {
         List<Map<String, Object>> list = new ArrayList<>();
         for (RobotTaskDto robotTask : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put("机器人id", robotTask.getRobotId());
+            map.put("机器人id", robotTask.getRobot().getRobotId());
             map.put("任务", robotTask.getTask());
             map.put("原执行时间", robotTask.getOldExecTime());
             map.put("执行时间", robotTask.getExecTime());
