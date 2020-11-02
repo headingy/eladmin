@@ -22,7 +22,7 @@ import java.io.Serializable;
 * @website https://el-admin.vip
 * @description /
 * @author Fu Ding
-* @date 2020-10-30
+* @date 2020-11-02
 **/
 @Data
 public class DeviceDto implements Serializable {
@@ -57,7 +57,7 @@ public class DeviceDto implements Serializable {
     private Integer defectType;
 
     /** 识别类型(0可见光，1可见光+热红外，2声音检测，3位置状态识别，4表计识别，5导航识别,6是否工作，7是否漏油） */
-    private String inspectType;
+    private Integer inspectType;
 
     /** 表针类型(0指针，1:LED数字，2一态档位，3两态档位，4三态档位，5指示针) */
     private String pointerType;

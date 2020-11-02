@@ -39,9 +39,10 @@ public class RobotTask implements Serializable {
     @ApiModelProperty(value = "主键")
     private String robotTaskId;
 
-    @Column(name = "robot_id")
-    @ApiModelProperty(value = "机器人id")
-    private String robotId;
+    @OneToOne
+    @JoinColumn(name = "robot_id")
+    @ApiModelProperty(value = "机器人")
+    private Robot robot;
 
     @OneToOne
     @JoinColumn(name = "task_id")

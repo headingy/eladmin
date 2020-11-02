@@ -26,7 +26,7 @@ import org.mapstruct.ReportingPolicy;
  * @website https://el-admin.vip
  * @date 2020-10-30
  **/
-@Mapper(componentModel = "spring", uses = {TaskMapper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", uses = {TaskMapper.class, RobotMapper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RobotTaskMapper extends BaseMapper<RobotTaskDto, RobotTask> {
 
 }

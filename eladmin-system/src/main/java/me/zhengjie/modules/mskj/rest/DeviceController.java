@@ -15,25 +15,27 @@
 */
 package me.zhengjie.modules.mskj.rest;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.modules.mskj.domain.Device;
 import me.zhengjie.modules.mskj.service.DeviceService;
 import me.zhengjie.modules.mskj.service.dto.DeviceQueryCriteria;
 import org.springframework.data.domain.Pageable;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
-import java.io.IOException;
+
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
 * @website https://el-admin.vip
 * @author Fu Ding
-* @date 2020-10-30
+* @date 2020-11-02
 **/
 @RestController
 @RequiredArgsConstructor

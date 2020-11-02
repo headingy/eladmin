@@ -22,6 +22,8 @@ public class TaskReportDto implements Serializable {
     private String taskId;
     //任务名称
     private String name;
+    //机器人名称
+    private String robotName;
     //制定人
     private String creator;
     //巡检设备数
