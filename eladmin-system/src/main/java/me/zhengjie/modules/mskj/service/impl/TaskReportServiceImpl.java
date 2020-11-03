@@ -85,10 +85,10 @@ public class TaskReportServiceImpl implements TaskReportService {
                 if (media == null) continue;
                 if (media.getType().equals(0) && media.getMediaType().equals("0")) {
                     pic.setLightPic(media.getPath());
-                    if (device.getInspectType() == DeviceInspectType.LIGHT_INFRARED.ordinal()
-                            && media.getType().equals(1) && media.getMediaType().equals("0")) {
-                        pic.setInfraredPic(media.getPath());
-                    }
+                }
+                if (device.getInspectType() == DeviceInspectType.LIGHT_INFRARED.ordinal()
+                        && media.getType().equals(1) && media.getMediaType().equals("0")) {
+                    pic.setInfraredPic(media.getPath());
                 }
             }
             pics.add(pic);
