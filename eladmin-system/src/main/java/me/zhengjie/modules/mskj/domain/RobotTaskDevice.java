@@ -15,12 +15,12 @@
 */
 package me.zhengjie.modules.mskj.domain;
 
-import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
-import io.swagger.annotations.ApiModelProperty;
 import cn.hutool.core.bean.copier.CopyOptions;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.io.Serializable;
 
 /**
@@ -43,17 +43,19 @@ public class RobotTaskDevice implements Serializable {
     @ApiModelProperty(value = "机器人id")
     private String robotId;
 
-    @Column(name = "robot_task_id")
-    @ApiModelProperty(value = "机器人任务id")
-    private String robotTaskId;
+    @OneToOne
+    @JoinColumn(name = "robot_task_id")
+    @ApiModelProperty(value = "机器人任务")
+    private RobotTask robotTask;
 
     @Column(name = "create_time")
     @ApiModelProperty(value = "记录时间")
     private String createTime;
 
-    @Column(name = "device_id")
-    @ApiModelProperty(value = "设备id")
-    private String deviceId;
+    @OneToOne
+    @JoinColumn(name = "device_id")
+    @ApiModelProperty(value = "设备")
+    private Device device;
 
     @Column(name = "value")
     @ApiModelProperty(value = "巡检表值")
