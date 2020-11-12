@@ -54,10 +54,10 @@ public class TaskReportServiceImpl implements TaskReportService {
         List<DevicePic> infraReds = new ArrayList<>();
         List<DevicePic> needles = new ArrayList<>();
         DecimalFormat df = new DecimalFormat("0.00");
-        List<RobotTaskDeviceDto> deviceDtos = robotTaskDeviceService.queryAll(
+        List<RobotTaskDeviceDto> deviceReports = robotTaskDeviceService.queryAll(
                 new RobotTaskDeviceQueryCriteria().robotTaskId(robotTaskId));
-        for (RobotTaskDeviceDto deviceDto : deviceDtos) {
-            DeviceDto device = deviceService.findById(deviceDto.getDeviceId());
+        for (RobotTaskDeviceDto deviceReport : deviceReports) {
+            DeviceDto device = deviceReport.getDevice();
             if (device == null) continue;
             if (report.getInspectType() == null) {
                 report.setInspectType(DeviceInspectType.values()[device.getInspectType()].getName());
@@ -67,7 +67,7 @@ public class TaskReportServiceImpl implements TaskReportService {
             } else if (device.getThreePhase() == 1) {
                 numDevices += 1;
             }
-            String value = String.valueOf(deviceDto.getResult()).trim();
+            String value = String.valueOf(deviceReport.getResult()).trim();
             for (int j = 0; j < value.length(); j++) {
                 if (value.charAt(j) == '1') {
                     numAbnormals += 1;
@@ -79,7 +79,7 @@ public class TaskReportServiceImpl implements TaskReportService {
             DevicePic pic = new DevicePic();
             pic.setDeviceId(device.getDeviceId());
             pic.setDeviceName(device.getDeviceName());
-            String[] mids = deviceDto.getMediaIds().split(",");
+            String[] mids = deviceReport.getMediaIds().split(",");
             for (String mid : mids) {
                 MediaDto media = mediaService.findById(mid);
                 if (media == null) continue;
@@ -96,13 +96,13 @@ public class TaskReportServiceImpl implements TaskReportService {
                 //热红外数据
                 DevicePic infra = new DevicePic();
                 infra.setDeviceName(device.getDeviceName());
-                infra.setMaxTemp(deviceDto.getMaxTemp());
-                Float max = Float.parseFloat(deviceDto.getMaxTemp());
-                Float temp = Float.parseFloat(deviceDto.getTemperature());
+                infra.setMaxTemp(deviceReport.getMaxTemp());
+                Float max = Float.parseFloat(deviceReport.getMaxTemp());
+                Float temp = Float.parseFloat(deviceReport.getTemperature());
                 infra.setTempUp(df.format(max - temp));
-                if (deviceDto.getResult().equals("0")) {
+                if (deviceReport.getResult().equals("0")) {
                     infra.setResult("正常");
-                } else if (deviceDto.getResult().equals("1")) {
+                } else if (deviceReport.getResult().equals("1")) {
                     infra.setResult("异常");
                 }
                 infraReds.add(infra);
@@ -111,10 +111,10 @@ public class TaskReportServiceImpl implements TaskReportService {
                 //仪表数据
                 DevicePic needle = new DevicePic();
                 needle.setDeviceName(device.getDeviceName());
-                needle.setValue(deviceDto.getValue());
-                if (deviceDto.getResult().equals("0")) {
+                needle.setValue(deviceReport.getValue());
+                if (deviceReport.getResult().equals("0")) {
                     needle.setResult("正常");
-                } else if (deviceDto.getResult().equals("1")) {
+                } else if (deviceReport.getResult().equals("1")) {
                     needle.setResult("异常");
                 }
                 needles.add(needle);

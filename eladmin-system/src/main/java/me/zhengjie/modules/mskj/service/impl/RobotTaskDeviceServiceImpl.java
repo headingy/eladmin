@@ -15,28 +15,29 @@
 */
 package me.zhengjie.modules.mskj.service.impl;
 
-import me.zhengjie.modules.mskj.domain.RobotTaskDevice;
-import me.zhengjie.utils.ValidationUtil;
-import me.zhengjie.utils.FileUtil;
+import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
+import me.zhengjie.modules.mskj.domain.RobotTaskDevice;
 import me.zhengjie.modules.mskj.repository.RobotTaskDeviceRepository;
 import me.zhengjie.modules.mskj.service.RobotTaskDeviceService;
 import me.zhengjie.modules.mskj.service.dto.RobotTaskDeviceDto;
 import me.zhengjie.modules.mskj.service.dto.RobotTaskDeviceQueryCriteria;
 import me.zhengjie.modules.mskj.service.mapstruct.RobotTaskDeviceMapper;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import cn.hutool.core.util.IdUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
-import java.util.List;
-import java.util.Map;
-import java.io.IOException;
+import me.zhengjie.utils.ValidationUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @website https://el-admin.vip
@@ -99,9 +100,9 @@ public class RobotTaskDeviceServiceImpl implements RobotTaskDeviceService {
         for (RobotTaskDeviceDto robotTaskDevice : all) {
             Map<String,Object> map = new LinkedHashMap<>();
             map.put("机器人id", robotTaskDevice.getRobotId());
-            map.put("机器人任务id", robotTaskDevice.getRobotTaskId());
+            map.put("机器人任务", robotTaskDevice.getRobotTask());
             map.put("记录时间", robotTaskDevice.getCreateTime());
-            map.put("设备id", robotTaskDevice.getDeviceId());
+            map.put("设备", robotTaskDevice.getDevice());
             map.put("巡检表值", robotTaskDevice.getValue());
             map.put("采集的图片信息（视频图像记录的id集合，以逗号隔开）", robotTaskDevice.getMediaIds());
             map.put("环境湿度", robotTaskDevice.getHumidity());

@@ -34,13 +34,13 @@ public class RobotTaskDeviceDto implements Serializable {
     private String robotId;
 
     /** 机器人任务id */
-    private String robotTaskId;
+    private RobotTaskDto robotTask;
 
     /** 记录时间 */
     private String createTime;
 
     /** 设备id */
-    private String deviceId;
+    private DeviceDto device;
 
     /** 巡检表值 */
     private String value;
