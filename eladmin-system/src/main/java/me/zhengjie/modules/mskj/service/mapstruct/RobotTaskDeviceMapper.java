@@ -26,7 +26,7 @@ import org.mapstruct.ReportingPolicy;
 * @author Fu Ding
 * @date 2020-10-30
 **/
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", uses = {MediaMapper.class, DeviceMapper.class, RobotTaskMapper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RobotTaskDeviceMapper extends BaseMapper<RobotTaskDeviceDto, RobotTaskDevice> {
 
 }

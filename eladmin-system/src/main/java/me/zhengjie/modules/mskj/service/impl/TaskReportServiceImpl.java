@@ -79,7 +79,9 @@ public class TaskReportServiceImpl implements TaskReportService {
             DevicePic pic = new DevicePic();
             pic.setDeviceId(device.getDeviceId());
             pic.setDeviceName(device.getDeviceName());
-            String[] mids = deviceReport.getMediaIds().split(",");
+            String midsStr = deviceReport.getMediaIds();
+            if (midsStr == null) midsStr = "";
+            String[] mids = midsStr.split(",");
             for (String mid : mids) {
                 MediaDto media = mediaService.findById(mid);
                 if (media == null) continue;

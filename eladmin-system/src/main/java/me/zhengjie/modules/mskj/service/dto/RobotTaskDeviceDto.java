@@ -16,7 +16,9 @@
 package me.zhengjie.modules.mskj.service.dto;
 
 import lombok.Data;
+
 import java.io.Serializable;
+import java.util.Set;
 
 /**
 * @website https://el-admin.vip
@@ -47,6 +49,9 @@ public class RobotTaskDeviceDto implements Serializable {
 
     /** 采集的图片信息（视频图像记录的id集合，以逗号隔开） */
     private String mediaIds;
+
+    /** 采集的媒体文件信息 */
+    private Set<MediaDto> mediaSet;
 
     /** 环境湿度 */
     private String humidity;
