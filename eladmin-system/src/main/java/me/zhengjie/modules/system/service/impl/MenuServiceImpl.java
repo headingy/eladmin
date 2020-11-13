@@ -175,6 +175,8 @@ public class MenuServiceImpl implements MenuService {
         menu.setCache(resources.getCache());
         menu.setHidden(resources.getHidden());
         menu.setComponentName(resources.getComponentName());
+        //TODO: if permission is changed, we should invalidate the cached authorities info
+        // for those users who have access to the menu
         menu.setPermission(resources.getPermission());
         menu.setType(resources.getType());
         menuRepository.save(menu);
