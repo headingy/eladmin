@@ -1,18 +1,18 @@
 /*
-*  Copyright 2019-2020 Zheng Jie
-*
-*  Licensed under the Apache License, Version 2.0 (the "License");
-*  you may not use this file except in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*  http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*  See the License for the specific language governing permissions and
-*  limitations under the License.
-*/
+ *  Copyright 2019-2020 Zheng Jie
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package me.zhengjie.modules.mskj.domain;
 
 import cn.hutool.core.bean.BeanUtil;
@@ -22,16 +22,17 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 /**
-* @website https://el-admin.vip
-* @description /
-* @author Fu Ding
-* @date 2020-10-30
-**/
+ * @author Fu Ding
+ * @website https://el-admin.vip
+ * @description /
+ * @date 2020-10-30
+ **/
 @Entity
 @Data
-@Table(name="sys_robot_task_device")
+@Table(name = "sys_robot_task_device")
 public class RobotTaskDevice implements Serializable {
 
     @Id
@@ -60,6 +61,11 @@ public class RobotTaskDevice implements Serializable {
     @Column(name = "value")
     @ApiModelProperty(value = "巡检表值")
     private String value;
+
+    @OneToMany
+    @JoinColumn(name = "robot_task_device_id")
+    @ApiModelProperty(value = "媒体文件列表")
+    private Set<Media> mediaSet;
 
     @Column(name = "media_ids")
     @ApiModelProperty(value = "采集的图片信息（视频图像记录的id集合，以逗号隔开）")
@@ -97,7 +103,7 @@ public class RobotTaskDevice implements Serializable {
     @ApiModelProperty(value = "备注")
     private String bz;
 
-    public void copy(RobotTaskDevice source){
-        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
+    public void copy(RobotTaskDevice source) {
+        BeanUtil.copyProperties(source, this, CopyOptions.create().setIgnoreNullValue(true));
     }
 }
