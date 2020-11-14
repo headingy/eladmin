@@ -1,9 +1,12 @@
 package me.zhengjie.modules.mskj.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.mskj.common.DeviceInspectType;
 import me.zhengjie.modules.mskj.service.*;
 import me.zhengjie.modules.mskj.service.dto.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
@@ -20,6 +23,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TaskReportServiceImpl implements TaskReportService {
+    private static final Logger log = LoggerFactory.getLogger(TaskReportServiceImpl.class);
 
     private final RobotTaskDeviceService robotTaskDeviceService;
     private final RobotTaskService robotTaskService;
@@ -76,24 +80,32 @@ public class TaskReportServiceImpl implements TaskReportService {
             if (value.equals("1")) {
                 warnDevices.add(device.getDeviceName());
             }
-            DevicePic pic = new DevicePic();
-            pic.setDeviceId(device.getDeviceId());
-            pic.setDeviceName(device.getDeviceName());
+
             String midsStr = deviceReport.getMediaIds();
-            if (midsStr == null) midsStr = "";
-            String[] mids = midsStr.split(",");
-            for (String mid : mids) {
-                MediaDto media = mediaService.findById(mid);
-                if (media == null) continue;
-                if (media.getType().equals(0) && media.getMediaType().equals("0")) {
-                    pic.setLightPic(media.getPath());
-                }
-                if (device.getInspectType() == DeviceInspectType.LIGHT_INFRARED.ordinal()
-                        && media.getType().equals(1) && media.getMediaType().equals("0")) {
-                    pic.setInfraredPic(media.getPath());
+            if (midsStr != null) {
+                String[] mids = midsStr.split(",");
+                for (String mid : mids) {
+                    MediaDto media;
+                    try {
+                        media = mediaService.findById(mid);
+                    } catch (BadRequestException e) {
+                        log.warn("cannot find media with id {}", mid);
+                        continue;
+                    }
+                    DevicePic pic = new DevicePic();
+                    pic.setDeviceId(device.getDeviceId());
+                    pic.setDeviceName(device.getDeviceName());
+                    if (media.getType().equals(0) && media.getMediaType().equals("0")) {
+                        pic.setLightPic(media.getPath());
+                    }
+                    if (device.getInspectType() == DeviceInspectType.LIGHT_INFRARED.ordinal()
+                            && media.getType().equals(1) && media.getMediaType().equals("0")) {
+                        pic.setInfraredPic(media.getPath());
+                    }
+                    pics.add(pic);
                 }
             }
-            pics.add(pic);
+
             if (device.getInspectType() == DeviceInspectType.LIGHT_INFRARED.ordinal()) {
                 //热红外数据
                 DevicePic infra = new DevicePic();
