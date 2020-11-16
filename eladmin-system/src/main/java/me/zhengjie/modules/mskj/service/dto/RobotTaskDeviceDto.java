@@ -41,7 +41,7 @@ public class RobotTaskDeviceDto implements Serializable {
     /** 记录时间 */
     private String createTime;
 
-    /** 设备id */
+    /** 设备 */
     private DeviceDto device;
 
     /** 巡检表值 */

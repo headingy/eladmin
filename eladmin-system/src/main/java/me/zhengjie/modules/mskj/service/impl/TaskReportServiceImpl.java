@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -42,7 +44,6 @@ public class TaskReportServiceImpl implements TaskReportService {
     public TaskReportDto getTaskReport(String robotTaskId) {
         TaskReportDto report = new TaskReportDto();
         RobotTaskDto robotTask = robotTaskService.findById(robotTaskId);
-//        TaskDto task = taskService.findById(robotTask.getTask().getTaskId());
         report.setTaskId(robotTask.getTask().getTaskId())
                 .setName(robotTask.getTask().getName())
                 .setCreator(robotTask.getTask().getCreater())
@@ -58,8 +59,9 @@ public class TaskReportServiceImpl implements TaskReportService {
         List<DevicePic> infraReds = new ArrayList<>();
         List<DevicePic> needles = new ArrayList<>();
         DecimalFormat df = new DecimalFormat("0.00");
-        List<RobotTaskDeviceDto> deviceReports = robotTaskDeviceService.queryAll(
-                new RobotTaskDeviceQueryCriteria().robotTaskId(robotTaskId));
+        RobotTaskDeviceQueryCriteria criteria = new RobotTaskDeviceQueryCriteria();
+        criteria.setRobotTasks(new HashSet<>(Arrays.asList(robotTaskId)));
+        List<RobotTaskDeviceDto> deviceReports = robotTaskDeviceService.queryAll(criteria);
         for (RobotTaskDeviceDto deviceReport : deviceReports) {
             DeviceDto device = deviceReport.getDevice();
             if (device == null) continue;
