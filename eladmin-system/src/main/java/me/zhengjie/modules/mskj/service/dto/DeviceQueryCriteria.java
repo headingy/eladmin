@@ -16,7 +16,6 @@
 package me.zhengjie.modules.mskj.service.dto;
 
 import lombok.Data;
-import java.util.List;
 import me.zhengjie.annotation.Query;
 
 /**
@@ -26,4 +25,6 @@ import me.zhengjie.annotation.Query;
 **/
 @Data
 public class DeviceQueryCriteria{
+    @Query(blurry = "deviceName")
+    private String blurry;
 }
