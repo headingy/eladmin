@@ -16,17 +16,17 @@
 package me.zhengjie.modules.mskj.service.mapstruct;
 
 import me.zhengjie.base.BaseMapper;
-import me.zhengjie.modules.mskj.domain.Robot;
-import me.zhengjie.modules.mskj.service.dto.RobotDto;
+import me.zhengjie.modules.mskj.domain.Map;
+import me.zhengjie.modules.mskj.service.dto.MapDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 /**
 * @website https://el-admin.vip
 * @author Fu Ding
-* @date 2020-10-27
+* @date 2020-11-19
 **/
-@Mapper(componentModel = "spring", uses = {MapMapper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface RobotMapper extends BaseMapper<RobotDto, Robot> {
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface MapMapper extends BaseMapper<MapDto, Map> {
 
 }

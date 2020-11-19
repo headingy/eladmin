@@ -1,6 +1,7 @@
 package me.zhengjie.modules.mskj.websocket.handler.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.modules.mskj.common.util.UUIDUtils;
 import me.zhengjie.modules.mskj.websocket.dto.AuthRequest;
 import me.zhengjie.modules.mskj.websocket.dto.AuthResponse;
@@ -9,8 +10,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@RequiredArgsConstructor
 @Component
 public class AuthMessageHandler implements MessageHandler {
+
     @Override
     public Object handle(String robotId, String message) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();

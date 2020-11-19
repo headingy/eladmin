@@ -144,9 +144,10 @@ public class Robot implements Serializable {
     @ApiModelProperty(value = "0代表巡检，1代表人脸识别")
     private String faceRecognition;
 
-    @Column(name = "map_id")
-    @ApiModelProperty(value = "地图ID")
-    private String mapId;
+    @OneToOne
+    @JoinColumn(name = "map_id")
+    @ApiModelProperty(value = "地图")
+    private Map map;
 
     public void copy(Robot source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

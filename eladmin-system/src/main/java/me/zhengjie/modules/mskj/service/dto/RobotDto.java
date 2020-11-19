@@ -107,6 +107,6 @@ public class RobotDto implements Serializable {
     /** 0代表巡检，1代表人脸识别 */
     private String faceRecognition;
 
-    /** 地图ID */
-    private String mapId;
+    /** 地图 */
+    private MapDto map;
 }

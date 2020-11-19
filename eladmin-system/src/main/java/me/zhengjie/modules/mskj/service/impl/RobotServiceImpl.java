@@ -1,49 +1,50 @@
 /*
-*  Copyright 2019-2020 Zheng Jie
-*
-*  Licensed under the Apache License, Version 2.0 (the "License");
-*  you may not use this file except in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*  http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*  See the License for the specific language governing permissions and
-*  limitations under the License.
-*/
+ *  Copyright 2019-2020 Zheng Jie
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package me.zhengjie.modules.mskj.service.impl;
 
-import me.zhengjie.modules.mskj.domain.Robot;
-import me.zhengjie.utils.ValidationUtil;
-import me.zhengjie.utils.FileUtil;
+import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
+import me.zhengjie.modules.mskj.domain.Robot;
 import me.zhengjie.modules.mskj.repository.RobotRepository;
 import me.zhengjie.modules.mskj.service.RobotService;
 import me.zhengjie.modules.mskj.service.dto.RobotDto;
 import me.zhengjie.modules.mskj.service.dto.RobotQueryCriteria;
 import me.zhengjie.modules.mskj.service.mapstruct.RobotMapper;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import cn.hutool.core.util.IdUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
-import java.util.List;
-import java.util.Map;
-import java.io.IOException;
+import me.zhengjie.utils.ValidationUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
-* @website https://el-admin.vip
-* @description 服务实现
-* @author Fu Ding
-* @date 2020-10-27
-**/
+ * @author Fu Ding
+ * @website https://el-admin.vip
+ * @description 服务实现
+ * @date 2020-10-27
+ **/
 @Service
 @RequiredArgsConstructor
 public class RobotServiceImpl implements RobotService {
@@ -52,28 +53,28 @@ public class RobotServiceImpl implements RobotService {
     private final RobotMapper robotMapper;
 
     @Override
-    public Map<String,Object> queryAll(RobotQueryCriteria criteria, Pageable pageable){
-        Page<Robot> page = robotRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+    public Map<String, Object> queryAll(RobotQueryCriteria criteria, Pageable pageable) {
+        Page<Robot> page = robotRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable);
         return PageUtil.toPage(page.map(robotMapper::toDto));
     }
 
     @Override
-    public List<RobotDto> queryAll(RobotQueryCriteria criteria){
-        return robotMapper.toDto(robotRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+    public List<RobotDto> queryAll(RobotQueryCriteria criteria) {
+        return robotMapper.toDto(robotRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public RobotDto findById(String robotId) {
         Robot robot = robotRepository.findById(robotId).orElseGet(Robot::new);
-        ValidationUtil.isNull(robot.getRobotId(),"Robot","robotId",robotId);
+        ValidationUtil.isNull(robot.getRobotId(), "Robot", "robotId", robotId);
         return robotMapper.toDto(robot);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public RobotDto create(Robot resources) {
-        resources.setRobotId(IdUtil.simpleUUID()); 
+        resources.setRobotId(IdUtil.simpleUUID());
         return robotMapper.toDto(robotRepository.save(resources));
     }
 
@@ -81,7 +82,7 @@ public class RobotServiceImpl implements RobotService {
     @Transactional(rollbackFor = Exception.class)
     public void update(Robot resources) {
         Robot robot = robotRepository.findById(resources.getRobotId()).orElseGet(Robot::new);
-        ValidationUtil.isNull( robot.getRobotId(),"Robot","id",resources.getRobotId());
+        ValidationUtil.isNull(robot.getRobotId(), "Robot", "id", resources.getRobotId());
         robot.copy(resources);
         robotRepository.save(robot);
     }
@@ -97,7 +98,7 @@ public class RobotServiceImpl implements RobotService {
     public void download(List<RobotDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
         for (RobotDto robot : all) {
-            Map<String,Object> map = new LinkedHashMap<>();
+            Map<String, Object> map = new LinkedHashMap<>();
             map.put("机器人编号", robot.getRobotNo());
             map.put("机器人名称", robot.getName());
             map.put("机器人运行状态", robot.getActionStatus());
@@ -123,8 +124,8 @@ public class RobotServiceImpl implements RobotService {
             map.put("热红外用户名", robot.getInfraredName());
             map.put("可见光密码", robot.getLightPassword());
             map.put("热红外密码", robot.getInfraredPassword());
-            map.put("0代表巡检，1代表人脸识别", robot.getFaceRecognition());
-            map.put("地图ID", robot.getMapId());
+            map.put("是否为人脸识别（0代表巡检，1代表人脸识别）", robot.getFaceRecognition());
+            map.put("地图", robot.getMap());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

@@ -4,7 +4,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.UUID;
 
-public abstract class UUIDUtils {
+public class UUIDUtils {
 
 
 	/**

@@ -35,7 +35,7 @@ public class RobotTaskDeviceDto implements Serializable {
     /** 机器人id */
     private String robotId;
 
-    /** 机器人任务id */
+    /** 机器人任务 */
     private RobotTaskDto robotTask;
 
     /** 记录时间 */
