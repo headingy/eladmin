@@ -18,6 +18,8 @@ package me.zhengjie.modules.mskj.service.dto;
 import lombok.Data;
 import me.zhengjie.annotation.Query;
 
+import java.util.Set;
+
 /**
 * @website https://el-admin.vip
 * @author Fu Ding
@@ -27,4 +29,6 @@ import me.zhengjie.annotation.Query;
 public class DeviceQueryCriteria{
     @Query(blurry = "deviceName")
     private String blurry;
+    @Query(type=Query.Type.NOT_IN, propName = "deviceType")
+    private Set<String> notDeviceTypes;
 }

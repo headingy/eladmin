@@ -3,6 +3,8 @@ package me.zhengjie.modules.mskj.service.impl;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.modules.mskj.common.CodeConst.WebResult;
 import me.zhengjie.modules.mskj.service.AutomatonService;
+import me.zhengjie.modules.mskj.service.RobotService;
+import me.zhengjie.modules.mskj.service.dto.RobotDto;
 import me.zhengjie.utils.RedisOldUtils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class AutomatonServiceImpl implements AutomatonService {
 
     private final RedisOldUtils redisOldUtils;
+    private final RobotService robotService;
     private static final Logger log = LoggerFactory.getLogger(AutomatonServiceImpl.class);
 
     /**
@@ -38,8 +41,9 @@ public class AutomatonServiceImpl implements AutomatonService {
             jsonObject.put("location", location == null ? "" : location.toString());
             Object statusMessage = redisOldUtils.get("statusMessage");
             jsonObject.put("alertMessage", statusMessage == null ? "" : statusMessage.toString());
-            jsonObject.put("mapName", "");
-            jsonObject.put("mapId", "");
+            RobotDto robot = robotService.findById(robotId);
+            jsonObject.put("mapName", robot.getMap().getMapName());
+            jsonObject.put("mapId", robot.getMap().getMapId());
         } catch (Exception e) {
             log.error("getIndexInfo", e);
         }

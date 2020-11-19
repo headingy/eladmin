@@ -63,6 +63,8 @@ public @interface Query {
         , RIGHT_LIKE
         // Dong ZhaoYang 2017/8/7 小于
         , LESS_THAN_NQ
+        // Ding Fu 2020/11/18 不包含
+        , NOT_IN
         // jie 2019/6/4 包含
         , IN
         // 不等于
