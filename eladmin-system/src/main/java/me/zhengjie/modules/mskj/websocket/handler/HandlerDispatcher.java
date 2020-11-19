@@ -1,26 +1,55 @@
 package me.zhengjie.modules.mskj.websocket.handler;
 
+import com.alibaba.fastjson.JSONObject;
 import me.zhengjie.modules.mskj.websocket.common.Const;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import static me.zhengjie.modules.mskj.websocket.common.Const.MessageType.*;
 
 @Component
 public class HandlerDispatcher {
-    @Qualifier("heartMessageHandler")
+    MessageHandler nopHandler;
     MessageHandler heartMessageHandler;
-    @Qualifier("authMessageHandler")
     MessageHandler authMessageHandler;
+    MessageHandler systemReportMessageHandler;
 
-    public MessageHandler getMessageHandler(String type) {
-        switch (type) {
-            case CMD_HEART:
+    @Autowired
+    public void setNopHandler(MessageHandler nopHandler) {
+        this.nopHandler = nopHandler;
+    }
+
+    @Autowired
+    public void setAuthMessageHandler(MessageHandler authMessageHandler) {
+        this.authMessageHandler = authMessageHandler;
+    }
+
+    @Autowired
+    public void getSystemReportMessageHandler(MessageHandler systemReportMessageHandler) {
+        this.systemReportMessageHandler=systemReportMessageHandler;
+    }
+
+    @Autowired
+    public void getHeartMessageHandler(MessageHandler heartMessageHandler) {
+        this.heartMessageHandler=heartMessageHandler;
+    }
+
+    public MessageHandler getTheMessageHandler(String message) {
+        JSONObject object = JSONObject.parseObject(message);
+        switch ((String)object.get("type")) {
+            case Const.MessageType.CMD_HEART:
                 return heartMessageHandler;
             case Const.MessageType.CMD_AUTH:
                 return authMessageHandler;
             //上报的消息
             case Const.MessageType.CMD_REPORT:
+                switch ((String)object.get("info_Type")){
+                    case "1":
+                        return systemReportMessageHandler;
+                    case "2":
+                    case "3":
+                    case "0":
+                    default:
+                        return nopHandler;
+                }
             case Const.MessageType.MEDIA:
             case Const.MessageType.INDEX:
             //机器人状态

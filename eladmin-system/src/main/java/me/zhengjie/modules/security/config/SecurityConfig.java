@@ -106,6 +106,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js",
+                        "/robot/cmd/**",
                         "/webSocket/**"
                 ).permitAll()
                 // swagger 文档

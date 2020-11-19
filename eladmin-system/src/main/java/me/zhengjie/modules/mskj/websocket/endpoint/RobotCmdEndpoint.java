@@ -1,11 +1,9 @@
 package me.zhengjie.modules.mskj.websocket.endpoint;
 
+import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.modules.mskj.websocket.service.RobotMessageService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.server.standard.SpringConfigurator;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -16,14 +14,18 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@ServerEndpoint(value = "/robot/cmd/{robotId}", configurator = SpringConfigurator.class)
+@ServerEndpoint(value = "/robot/cmd/{robotId}")
+@Slf4j
 @Component
 public class RobotCmdEndpoint {
-    private Logger log = LoggerFactory.getLogger(this.getClass());
     private Map<String, Session> robotIdMap = new LinkedHashMap<>();
     private Map<String, String> sessionIdMap = new LinkedHashMap<>();
+    static RobotMessageService robotMessageService;
+
     @Autowired
-    RobotMessageService robotMessageService;
+    public void setRobotMessageService(RobotMessageService service) {
+        robotMessageService = service;
+    }
 
     /**
      * 建立连接时
@@ -47,7 +49,7 @@ public class RobotCmdEndpoint {
         } else {
             sessionIdMap.put(session.getId(), robotId);
         }
-        log.info("ws connected from robot {}", robotId);
+        log.info("robot {} connected", robotId);
 
         robotMessageService.onOpen(robotId);
     }
@@ -61,8 +63,8 @@ public class RobotCmdEndpoint {
      */
     @OnMessage
     public void onMessage(Session session, String message) throws IOException {
-       String robotId = sessionIdMap.get(session.getId());
-        log.info("ws msg received from robot {}: {}", robotId, message);
+        String robotId = sessionIdMap.get(session.getId());
+        log.info("message received from robot {}: {}", robotId, message);
 
         String ret = robotMessageService.onMessage(robotId, message);
         sendMessage(session, robotId, ret);
@@ -74,11 +76,11 @@ public class RobotCmdEndpoint {
      * @param session
      */
     @OnClose
-    public void onClose(Session session) {
+    public void onClose(Session session, CloseReason reason) {
         String robotId = sessionIdMap.get(session.getId());
         robotIdMap.remove(robotId);
         sessionIdMap.remove(session.getId());
-        log.info("ws disconnected. robot {}", robotId);
+        log.info("connection with robot {} is closed for {}", robotId, reason.getReasonPhrase());
 
         robotMessageService.onClose(robotId);
     }
@@ -106,7 +108,7 @@ public class RobotCmdEndpoint {
     public void sendMessage(Session session, String robotId, String message) throws IOException {
         if (message == null) return;
         session.getBasicRemote().sendText(message);
-        log.info("ws message sent to robot {}: {}", robotId, message);
+        log.info("message sent to robot {}: {}", robotId, message);
     }
 
 }
