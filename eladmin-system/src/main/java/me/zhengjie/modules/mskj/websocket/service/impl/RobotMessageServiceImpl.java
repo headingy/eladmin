@@ -2,11 +2,9 @@ package me.zhengjie.modules.mskj.websocket.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.zhengjie.modules.mskj.websocket.common.Const;
-import me.zhengjie.modules.mskj.websocket.dto.HeartRequest;
-import me.zhengjie.modules.mskj.websocket.dto.HeartResponse;
-import me.zhengjie.modules.mskj.websocket.dto.Request;
 import me.zhengjie.modules.mskj.websocket.handler.HandlerDispatcher;
 import me.zhengjie.modules.mskj.websocket.service.RobotMessageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -15,6 +13,11 @@ import java.io.IOException;
 public class RobotMessageServiceImpl implements RobotMessageService {
 
     HandlerDispatcher handlerDispatcher;
+
+    @Autowired
+    public void setHandlerDispatcher(HandlerDispatcher dispatcher) {
+        handlerDispatcher = dispatcher;
+    }
 
     @Override
     public void onOpen(String robotId) {
@@ -41,16 +44,15 @@ public class RobotMessageServiceImpl implements RobotMessageService {
          *  8.充电完成后返回的消息
          */
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        Request req = objectMapper.readValue(message, Request.class);
 //        String robotId = jsonObject.getString("robot_id");
         //根据机器人上报不同的消息类型来进行不同的操作
-        String rspMessage = handlerDispatcher.getMessageHandler(req.getType()).handle(message).toString();;
-        switch (req.getType()) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Object rspObj = handlerDispatcher.getTheMessageHandler(message).handle(robotId, message);
+        String rspMessage = objectMapper.writeValueAsString(rspObj);
+
+        switch (rspMessage) {
             //心跳
             case Const.MessageType.CMD_HEART:
-                HeartRequest request = objectMapper.readValue(message, HeartRequest.class);
-                rspMessage = robotHeart(request).toString();
                 break;
             //请求认证证书
             case Const.MessageType.CMD_AUTH:
@@ -181,12 +183,7 @@ public class RobotMessageServiceImpl implements RobotMessageService {
     }
 
     private String robotAuth(String message) {
-        return null;
+        return message;
     }
 
-    private HeartResponse robotHeart(HeartRequest req) {
-        HeartResponse response = HeartResponse.builder().result("1").serverTime("").build();
-        //TODO 保存机器人地址
-        return response;
-    }
 }
