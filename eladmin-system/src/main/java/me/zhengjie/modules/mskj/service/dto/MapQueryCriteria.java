@@ -16,6 +16,7 @@
 package me.zhengjie.modules.mskj.service.dto;
 
 import lombok.Data;
+import me.zhengjie.annotation.Query;
 
 /**
  * @author Fu Ding
@@ -24,6 +25,6 @@ import lombok.Data;
  **/
 @Data
 public class MapQueryCriteria {
-//    @Query(type = Query.Type.EQUAL, joinName = "robotMap", propName = "mapId")
-//    private String mapId;
+    @Query(type = Query.Type.EQUAL)
+    private String mapId;
 }
