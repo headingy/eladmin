@@ -50,7 +50,7 @@ public class RobotMessageServiceImpl implements RobotMessageService {
         Object rspObj = handlerDispatcher.getTheMessageHandler(message).handle(robotId, message);
         String rspMessage = rspObj == null ? null : objectMapper.writeValueAsString(rspObj);
 
-        switch (rspMessage) {
+        switch ("") {
             //心跳
             case Const.MessageType.CMD_HEART:
                 break;

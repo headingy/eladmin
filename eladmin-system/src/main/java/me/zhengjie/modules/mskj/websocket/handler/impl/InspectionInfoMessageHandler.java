@@ -7,10 +7,7 @@ import me.zhengjie.modules.mskj.domain.Device;
 import me.zhengjie.modules.mskj.domain.RobotTask;
 import me.zhengjie.modules.mskj.domain.RobotTaskDevice;
 import me.zhengjie.modules.mskj.domain.WarnInfo;
-import me.zhengjie.modules.mskj.service.DeviceService;
-import me.zhengjie.modules.mskj.service.NeedlechartService;
-import me.zhengjie.modules.mskj.service.PointerchartService;
-import me.zhengjie.modules.mskj.service.RobotTaskDeviceService;
+import me.zhengjie.modules.mskj.service.*;
 import me.zhengjie.modules.mskj.service.dto.DeviceDto;
 import me.zhengjie.modules.mskj.service.dto.PointerchartDto;
 import me.zhengjie.modules.mskj.websocket.common.Const;
@@ -32,17 +29,15 @@ public class InspectionInfoMessageHandler implements MessageHandler {
     private final PointerchartService pointerchartService;
     private final NeedlechartService needlechartService;
     private final DeviceUtils deviceUtils;
+    final WarnInfoService warnInfoService;
 
-    //    @Autowired
-//    public void setDeviceService(DeviceService deviceService){
-//        this.deviceService=deviceService;
-//    }
     @Override
     public Object handle(String robotId, String msg) throws IOException {
 //        ObjectMapper objectMapper = new ObjectMapper();
 //        InspectionInfoMessage message = objectMapper.readValue(msg, InspectionInfoMessage.class);
-        //TODO write to warninfo db
         JSONObject obj = JSONObject.fromObject(msg);
+        Integer infoType = Integer.parseInt(obj.getString("info_Type"));
+        String taskId = obj.getString("task_id");
         WarnInfo reportInfo = new WarnInfo();
         //任务id 用来确定同一次巡检
         String robotTaskId = obj.getString("task_id");
@@ -229,6 +224,12 @@ public class InspectionInfoMessageHandler implements MessageHandler {
         rt.setRobotTaskId(robotTaskId);
         robotTaskDeviceEntity.setRobotTask(rt);
         robotTaskDeviceService.create(robotTaskDeviceEntity);
+        reportInfo.setInfoId(UUIDUtils.generateUUID());
+        reportInfo.setCreateTime(DateTimeUtils.getTodayDateTime());
+        reportInfo.setInfoType(infoType);
+        reportInfo.setRobotTaskId(taskId);
+        warnInfoService.create(reportInfo);
+
         //TODO trigger outgoing RESTful call
         return orderMessage;
     }
