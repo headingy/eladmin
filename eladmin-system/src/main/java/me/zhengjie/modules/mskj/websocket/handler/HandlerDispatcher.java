@@ -1,36 +1,18 @@
 package me.zhengjie.modules.mskj.websocket.handler;
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.modules.mskj.websocket.common.Const;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+@RequiredArgsConstructor
 @Component
 public class HandlerDispatcher {
-    MessageHandler nopHandler;
-    MessageHandler heartMessageHandler;
-    MessageHandler authMessageHandler;
-    MessageHandler systemReportMessageHandler;
-
-    @Autowired
-    public void setNopHandler(MessageHandler nopHandler) {
-        this.nopHandler = nopHandler;
-    }
-
-    @Autowired
-    public void setAuthMessageHandler(MessageHandler authMessageHandler) {
-        this.authMessageHandler = authMessageHandler;
-    }
-
-    @Autowired
-    public void getSystemReportMessageHandler(MessageHandler systemReportMessageHandler) {
-        this.systemReportMessageHandler=systemReportMessageHandler;
-    }
-
-    @Autowired
-    public void getHeartMessageHandler(MessageHandler heartMessageHandler) {
-        this.heartMessageHandler=heartMessageHandler;
-    }
+    final MessageHandler nopHandler;
+    final MessageHandler heartMessageHandler;
+    final MessageHandler authMessageHandler;
+    final MessageHandler systemInfoMessageHandler;
+    final MessageHandler inspectionInfoMessageHandler;
 
     public MessageHandler getTheMessageHandler(String message) {
         JSONObject object = JSONObject.parseObject(message);
@@ -43,8 +25,9 @@ public class HandlerDispatcher {
             case Const.MessageType.CMD_REPORT:
                 switch ((String)object.get("info_Type")){
                     case "1":
-                        return systemReportMessageHandler;
+                        return systemInfoMessageHandler;
                     case "2":
+                        return inspectionInfoMessageHandler;
                     case "3":
                     case "0":
                     default:

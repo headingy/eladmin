@@ -48,7 +48,7 @@ public class RobotMessageServiceImpl implements RobotMessageService {
         //根据机器人上报不同的消息类型来进行不同的操作
         ObjectMapper objectMapper = new ObjectMapper();
         Object rspObj = handlerDispatcher.getTheMessageHandler(message).handle(robotId, message);
-        String rspMessage = objectMapper.writeValueAsString(rspObj);
+        String rspMessage = rspObj == null ? null : objectMapper.writeValueAsString(rspObj);
 
         switch (rspMessage) {
             //心跳
