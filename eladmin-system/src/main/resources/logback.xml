@@ -42,4 +42,8 @@
     <logger name="jdbc.audit" level="OFF" additivity="false">
         <appender-ref ref="console" />
     </logger>
+
+    <logger name="me.zhengjie.modules.mskj" level="DEBUG" additivity="false">
+        <appender-ref ref="console" />
+    </logger>
 </configuration>

@@ -111,3 +111,12 @@ file:
   # 文件大小 /M
   maxSize: 100
   avatarMaxSize: 5
+
+mskj:
+  # 0:油田； 1:电力; 2:燃气
+  # one of: oil, power, gas(default)
+  applicationType: power
+  cache:
+    expire:
+      robotOnlineStatus: 0
+      robotDeviceStatus: 0

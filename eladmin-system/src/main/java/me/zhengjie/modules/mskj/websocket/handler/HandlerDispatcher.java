@@ -14,6 +14,7 @@ public class HandlerDispatcher {
     final MessageHandler systemInfoMessageHandler;
     final MessageHandler inspectionInfoMessageHandler;
     final MessageHandler environmentalWarningMessageHandler;
+    final MessageHandler indexMessageHandler;
 
     public MessageHandler getTheMessageHandler(String message) {
         JSONObject object = JSONObject.parseObject(message);
@@ -63,6 +64,7 @@ public class HandlerDispatcher {
                 }
             case Const.MessageType.MEDIA:
             case Const.MessageType.INDEX:
+                return indexMessageHandler;
             //机器人状态
             case Const.MessageType.STATUS:
             //首页警告信息
