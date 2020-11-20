@@ -16,8 +16,10 @@ public class Cache {
 
     @Value("${mskj.cache.expire.robotOnlineStatus}")
     int robotOnlineStatusExpire;
-    @Value("${mskj.cache.expire.robotDeviceStatus}")
-    int robotDeviceStatusExpire;
+    @Value("${mskj.cache.expire.robotEnvironmentStatus}")
+    int robotEnvironmentStatusExpire;
+    @Value("${mskj.cache.expire.robotHardwareStatus}")
+    int robotHardwareStatusExpire;
 
     /**
      * 更新机器人在线状态
@@ -36,13 +38,23 @@ public class Cache {
         return MessageFormat.format("robot:{0}:online", robotId);
     }
 
-    public void updateRobotDeviceStatus(String robotId, String status) {
-        String key = getRobotDeviceStatusKey(robotId);
-        log.debug("cache {} set to {}, expire in {} seconds", key, status, robotDeviceStatusExpire);
-        redisUtils.set(key, status, robotDeviceStatusExpire);
+    public void updateRobotEnvironmentStatus(String robotId, String status) {
+        String key = getRobotEnvironmentStatusKey(robotId);
+        log.debug("cache {} set to {}, expire in {} seconds", key, status, robotEnvironmentStatusExpire);
+        redisUtils.set(key, status, robotEnvironmentStatusExpire);
     }
 
-    private String getRobotDeviceStatusKey(String robotId) {
-        return MessageFormat.format("robot:{0}:status", robotId);
+    private String getRobotEnvironmentStatusKey(String robotId) {
+        return MessageFormat.format("robot:{0}:environ", robotId);
+    }
+
+    public void updateRobotHardwareStatus(String robotId, String status) {
+        String key = getRobotHardwareStatusKey(robotId);
+        log.debug("cache {} set to {}, expire in {} seconds", key, status, robotHardwareStatusExpire);
+        redisUtils.set(key, status, robotHardwareStatusExpire);
+    }
+
+    private String getRobotHardwareStatusKey(String robotId) {
+        return MessageFormat.format("robot:{0}:hardware", robotId);
     }
 }

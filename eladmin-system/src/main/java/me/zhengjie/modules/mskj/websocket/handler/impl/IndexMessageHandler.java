@@ -91,7 +91,7 @@ public class IndexMessageHandler implements MessageHandler {
         environment.setRobotTaskId(taskId);
         environmentService.create(environment);
 
-        cache.updateRobotDeviceStatus(robotId, obj.toString());
+        cache.updateRobotEnvironmentStatus(robotId, obj.toString());
         return null;
     }
 }

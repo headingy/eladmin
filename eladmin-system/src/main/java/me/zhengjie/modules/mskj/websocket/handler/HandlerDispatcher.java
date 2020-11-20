@@ -15,6 +15,7 @@ public class HandlerDispatcher {
     final MessageHandler inspectionInfoMessageHandler;
     final MessageHandler environmentalWarningMessageHandler;
     final MessageHandler indexMessageHandler;
+    final MessageHandler statusMessageHandler;
 
     public MessageHandler getTheMessageHandler(String message) {
         JSONObject object = JSONObject.parseObject(message);
@@ -67,6 +68,7 @@ public class HandlerDispatcher {
                 return indexMessageHandler;
             //机器人状态
             case Const.MessageType.STATUS:
+                return statusMessageHandler;
             //首页警告信息
             case Const.MessageType.ALERT:
             case Const.MessageType.TASK:

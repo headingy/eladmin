@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
-public class RobotStatusMessage {
+public class StatusMessage {
     String type; // 必须是STATUS
     // 所有字段均为字符串， 1 代表正常， 0 代表不正常
     String laser; // 雷达状态， 1 代表正常， 0 代表不正常

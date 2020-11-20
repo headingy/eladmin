@@ -119,4 +119,5 @@ mskj:
   cache:
     expire:
       robotOnlineStatus: 0
-      robotDeviceStatus: 0
+      robotEnvironmentStatus: 0
+      robotHardwareStatus: 0
