@@ -130,3 +130,4 @@ mskj:
       robotOnlineStatus: 10
       robotEnvironmentStatus: 300
       robotHardwareStatus: 300
+      robotAlertStatus: 300

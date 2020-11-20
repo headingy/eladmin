@@ -121,3 +121,4 @@ mskj:
       robotOnlineStatus: 0
       robotEnvironmentStatus: 0
       robotHardwareStatus: 0
+      robotAlertStatus: 0

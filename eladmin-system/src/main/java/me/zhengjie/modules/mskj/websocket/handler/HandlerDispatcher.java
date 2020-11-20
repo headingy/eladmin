@@ -16,6 +16,7 @@ public class HandlerDispatcher {
     final MessageHandler environmentalWarningMessageHandler;
     final MessageHandler indexMessageHandler;
     final MessageHandler statusMessageHandler;
+    final MessageHandler alertMessageHandler;
 
     public MessageHandler getTheMessageHandler(String message) {
         JSONObject object = JSONObject.parseObject(message);
@@ -71,6 +72,7 @@ public class HandlerDispatcher {
                 return statusMessageHandler;
             //首页警告信息
             case Const.MessageType.ALERT:
+                return alertMessageHandler;
             case Const.MessageType.TASK:
             case Const.MessageType.CHARGE:
             case Const.MessageType.FILE:
