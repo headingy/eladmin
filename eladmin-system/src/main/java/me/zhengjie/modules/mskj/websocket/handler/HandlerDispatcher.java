@@ -18,6 +18,7 @@ public class HandlerDispatcher {
     final MessageHandler statusMessageHandler;
     final MessageHandler alertMessageHandler;
     final MessageHandler taskMessageHandler;
+    final MessageHandler chargeMessageHandler;
 
     public MessageHandler getTheMessageHandler(String message) {
         JSONObject object = JSONObject.parseObject(message);
@@ -78,6 +79,7 @@ public class HandlerDispatcher {
             case Const.MessageType.TASK:
                 return taskMessageHandler;
             case Const.MessageType.CHARGE:
+                return chargeMessageHandler;
             case Const.MessageType.FILE:
             //人脸识别图片上传
             case Const.MessageType.FACE_RECOGNITION:

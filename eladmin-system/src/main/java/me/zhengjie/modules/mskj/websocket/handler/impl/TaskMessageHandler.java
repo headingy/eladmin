@@ -42,6 +42,7 @@ public class TaskMessageHandler implements MessageHandler {
         String alarm = obj.optString("alarm", "");
         RobotTaskDto robotTask = robotTaskService.findById(robotTaskId);
         if (robotTask == null) {
+            log.warn("robot task not found by id {}", robotTaskId);
             return null;
         }
 
@@ -56,12 +57,13 @@ public class TaskMessageHandler implements MessageHandler {
         obj.put("warnDevicesNum", warnInfos.size());
 
         //如果运行状态为working 则正在运行中  end 任务结束
+        String statusTxt;
         switch (status) {
             case "0":
-                status = "执行中";
+                statusTxt = "执行中";
                 break;
             case "1":
-                status = "执行中";
+                statusTxt = "执行中";
                 WarnInfo warnInfo = new WarnInfo();
                 warnInfo.setInfoId(UUIDUtils.generateUUID());
                 warnInfo.setCreateTime(DateTimeUtils.getTodayDateTime());
@@ -81,7 +83,7 @@ public class TaskMessageHandler implements MessageHandler {
                 warnInfoService.create(warnInfo);
                 break;
             case "2":
-                status = "执行完成";
+                statusTxt = "执行完成";
                 //如果任务完成，修改任务状态为已完成
                 RobotTask robotTaskEntity = new RobotTask();
                 robotTaskEntity.setRobotTaskId(robotTaskId);
@@ -97,8 +99,11 @@ public class TaskMessageHandler implements MessageHandler {
                     taskService.update(task);
                 }
                 break;
+            default:
+                log.warn("status {} not supported in TASK message", status);
+                return null;
         }
-        obj.replace("status", status);
+        obj.replace("status", statusTxt);
         obj.replace("current_point", device.getDeviceName());
         obj.replace("robot_id", robotTask.getRobot().getName());
         //缓存起来在暂停任务时用

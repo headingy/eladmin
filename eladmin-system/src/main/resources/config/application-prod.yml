@@ -133,3 +133,4 @@ mskj:
       robotAlertStatus: 300
       robotCurrentPoint: 300
       robotTaskMessage: 300
+      robotChargeTaskId: 300

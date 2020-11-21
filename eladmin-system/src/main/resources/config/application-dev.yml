@@ -124,3 +124,4 @@ mskj:
       robotAlertStatus: 0
       robotCurrentPoint: 0
       robotTaskMessage: 0
+      robotChargeTaskId: 0
