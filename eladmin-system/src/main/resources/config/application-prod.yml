@@ -131,3 +131,5 @@ mskj:
       robotEnvironmentStatus: 300
       robotHardwareStatus: 300
       robotAlertStatus: 300
+      robotCurrentPoint: 300
+      robotTaskMessage: 300

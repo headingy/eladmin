@@ -122,3 +122,5 @@ mskj:
       robotEnvironmentStatus: 0
       robotHardwareStatus: 0
       robotAlertStatus: 0
+      robotCurrentPoint: 0
+      robotTaskMessage: 0

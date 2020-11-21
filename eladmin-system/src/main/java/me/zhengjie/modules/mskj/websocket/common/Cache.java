@@ -22,6 +22,10 @@ public class Cache {
     int robotHardwareStatusExpire;
     @Value("${mskj.cache.expire.robotAlertStatus}")
     int robotAlertStatusExpire;
+    @Value("${mskj.cache.expire.robotCurrentPoint}")
+    int robotCurrentPointExpire;
+    @Value("${mskj.cache.expire.robotTaskMessage}")
+    int robotTaskMessageExpire;
 
     /**
      * 更新机器人在线状态
@@ -69,4 +73,35 @@ public class Cache {
     private String getRobotAlertStatusKey(String robotId) {
         return MessageFormat.format("robot:{0}:alert", robotId);
     }
+
+    public void updateRobotCurrentTask(String robotId, String taskId) {
+        String key = getRobotCurrentTaskKey(robotId);
+        log.debug("cache {} set to {}, expire in {} seconds", key, taskId, 0);
+        redisUtils.set(key, taskId, 0);
+    }
+
+    private String getRobotCurrentTaskKey(String robotId) {
+        return MessageFormat.format("robot:{0}:currentTask", robotId);
+    }
+
+    public void updateRobotCurrentPoint(String robotId, String taskId) {
+        String key = getRobotCurrentPointKey(robotId);
+        log.debug("cache {} set to {}, expire in {} seconds", key, taskId, robotCurrentPointExpire);
+        redisUtils.set(key, taskId, robotCurrentPointExpire);
+    }
+
+    private String getRobotCurrentPointKey(String robotId) {
+        return MessageFormat.format("robot:{0}:currentPoint", robotId);
+    }
+
+    public void updateRobotTaskMessage(String robotId, String taskId) {
+        String key = getRobotTaskMessageKey(robotId);
+        log.debug("cache {} set to {}, expire in {} seconds", key, taskId, robotTaskMessageExpire);
+        redisUtils.set(key, taskId, robotTaskMessageExpire);
+    }
+
+    private String getRobotTaskMessageKey(String robotId) {
+        return MessageFormat.format("robot:{0}:taskMessage", robotId);
+    }
+
 }

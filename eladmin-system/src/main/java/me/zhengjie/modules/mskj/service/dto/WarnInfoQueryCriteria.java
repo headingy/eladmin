@@ -16,10 +16,9 @@
 package me.zhengjie.modules.mskj.service.dto;
 
 import lombok.Data;
+import me.zhengjie.annotation.Query;
 
 import java.sql.Timestamp;
-import java.util.List;
-import me.zhengjie.annotation.Query;
 
 /**
 * @website https://el-admin.vip
@@ -33,4 +32,7 @@ public class WarnInfoQueryCriteria{
 
     @Query(type = Query.Type.EQUAL)
     private Integer infoType;
+
+    @Query
+    private String robotTaskId;
 }

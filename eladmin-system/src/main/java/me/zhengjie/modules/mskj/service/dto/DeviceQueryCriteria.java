@@ -26,10 +26,10 @@ import java.util.Set;
  **/
 @Data
 public class DeviceQueryCriteria {
-    @Query(blurry = "deviceName,mapName")
-    private String blurry;
-    @Query
-    private String deviceType;
+    @Query(blurry = "deviceName")
+    private String blurryDeviceName;
+    @Query(type = Query.Type.IN, propName = "deviceType")
+    private Set<String> deviceTypes;
     @Query(type = Query.Type.NOT_IN, propName = "deviceType")
     private Set<String> notDeviceTypes;
 }

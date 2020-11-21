@@ -17,6 +17,7 @@ public class HandlerDispatcher {
     final MessageHandler indexMessageHandler;
     final MessageHandler statusMessageHandler;
     final MessageHandler alertMessageHandler;
+    final MessageHandler taskMessageHandler;
 
     public MessageHandler getTheMessageHandler(String message) {
         JSONObject object = JSONObject.parseObject(message);
@@ -65,6 +66,7 @@ public class HandlerDispatcher {
                         return nopHandler;
                 }
             case Const.MessageType.MEDIA:
+                return nopHandler;
             case Const.MessageType.INDEX:
                 return indexMessageHandler;
             //机器人状态
@@ -74,6 +76,7 @@ public class HandlerDispatcher {
             case Const.MessageType.ALERT:
                 return alertMessageHandler;
             case Const.MessageType.TASK:
+                return taskMessageHandler;
             case Const.MessageType.CHARGE:
             case Const.MessageType.FILE:
             //人脸识别图片上传
