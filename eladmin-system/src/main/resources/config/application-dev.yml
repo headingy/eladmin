@@ -116,6 +116,11 @@ mskj:
   # 0:油田； 1:电力; 2:燃气
   # one of: oil, power, gas(default)
   applicationType: power
+  patrolResult:
+    video_folder: videos
+    voice_folder: voices
+    image_folder: images
+    map_folder: maps
   cache:
     expire:
       robotOnlineStatus: 0

@@ -40,6 +40,9 @@ public class RobotTaskDeviceQueryCriteria implements Serializable {
     @Query(type = Query.Type.IN, joinName = "device", propName = "deviceType")
     private Set<String> deviceTypes= new HashSet<>();
 
+    @Query(type = Query.Type.EQUAL, joinName = "device", propName = "deviceId")
+    private String deviceId;
+
     @Query(type = Query.Type.IN, joinName = "robotTask", propName = "robotTaskId")
     private Set<String> robotTasks = new HashSet<>();
 
