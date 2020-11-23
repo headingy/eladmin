@@ -25,6 +25,9 @@ import me.zhengjie.annotation.Query;
 **/
 @Data
 public class WarnSettingQueryCriteria{
+    @Query(blurry = "warnKey")
+    String blurryWarnKey;
+
     @Query
-    String warnKey;
+    String level;
 }

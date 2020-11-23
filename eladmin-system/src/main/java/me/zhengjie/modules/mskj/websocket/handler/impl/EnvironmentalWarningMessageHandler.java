@@ -47,7 +47,7 @@ public class EnvironmentalWarningMessageHandler implements MessageHandler {
         WarnSettingDto warnSettingEntity = new WarnSettingDto();
         warnSettingEntity.setWarnKey(environment);
         WarnSettingQueryCriteria queryCriteria = new WarnSettingQueryCriteria();
-        queryCriteria.setWarnKey(environment);
+        queryCriteria.setBlurryWarnKey(environment);
         List<WarnSettingDto> warnSettings = warnSettingService.queryAll(queryCriteria);
         if (warnSettings != null && warnSettings.size() > 0) {
             warnSettingEntity = warnSettings.get(0);//告警设置表的信息
