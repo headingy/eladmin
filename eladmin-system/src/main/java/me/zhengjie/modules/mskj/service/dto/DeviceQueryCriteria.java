@@ -32,4 +32,8 @@ public class DeviceQueryCriteria {
     private Set<String> deviceTypes;
     @Query(type = Query.Type.NOT_IN, propName = "deviceType")
     private Set<String> notDeviceTypes;
+    @Query
+    private String deviceId;
+    @Query
+    private Integer chargingPileStatus;
 }

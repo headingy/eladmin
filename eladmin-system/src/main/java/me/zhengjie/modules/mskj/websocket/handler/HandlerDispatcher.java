@@ -19,6 +19,13 @@ public class HandlerDispatcher {
     final MessageHandler alertMessageHandler;
     final MessageHandler taskMessageHandler;
     final MessageHandler chargeMessageHandler;
+    final MessageHandler fileMessageHandler;
+    final MessageHandler referenceInfoMessageHandler;
+    final MessageHandler chargeRequestMessageHandler;
+    final MessageHandler chargeGoingMessageHandler;
+    final MessageHandler chargeAppointmentMessageHandler;
+    final MessageHandler chargeAppointmentErrorMessageHandler;
+    final MessageHandler chargeFinishedMessageHandler;
 
     public MessageHandler getTheMessageHandler(String message) {
         JSONObject object = JSONObject.parseObject(message);
@@ -81,18 +88,27 @@ public class HandlerDispatcher {
             case Const.MessageType.CHARGE:
                 return chargeMessageHandler;
             case Const.MessageType.FILE:
+                return fileMessageHandler;
             //人脸识别图片上传
             case Const.MessageType.FACE_RECOGNITION:
+                //TODO not high priority
+                return nopHandler;
             //上传机器人位置信息
             case Const.MessageType.REFERENCEINFO:
+                return referenceInfoMessageHandler;
             //机器人请求充电
             case Const.MessageType.CHARGE_REQUEST:
+                return chargeRequestMessageHandler;
             //机器人开始充电
             case Const.MessageType.CHARGE_GOING:
+                return chargeGoingMessageHandler;
             case Const.MessageType.CHARGE_APPOINTMENT:
+                return chargeAppointmentMessageHandler;
             //机器人到充电桩不可达
             case Const.MessageType.CHARGE_APPOINTMENT_ERROR:
+                return chargeAppointmentErrorMessageHandler;
             case Const.MessageType.CHARGE_FINISHED:
+                return chargeFinishedMessageHandler;
             case Const.MessageType.CHARGE_EXCEPTION:
             case Const.MessageType.patrolResult:
             //控制指令的返回

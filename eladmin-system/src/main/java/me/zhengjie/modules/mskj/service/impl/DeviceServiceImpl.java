@@ -1,49 +1,50 @@
 /*
-*  Copyright 2019-2020 Zheng Jie
-*
-*  Licensed under the Apache License, Version 2.0 (the "License");
-*  you may not use this file except in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*  http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*  See the License for the specific language governing permissions and
-*  limitations under the License.
-*/
+ *  Copyright 2019-2020 Zheng Jie
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package me.zhengjie.modules.mskj.service.impl;
 
-import me.zhengjie.modules.mskj.domain.Device;
-import me.zhengjie.utils.ValidationUtil;
-import me.zhengjie.utils.FileUtil;
+import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
+import me.zhengjie.modules.mskj.domain.Device;
 import me.zhengjie.modules.mskj.repository.DeviceRepository;
 import me.zhengjie.modules.mskj.service.DeviceService;
 import me.zhengjie.modules.mskj.service.dto.DeviceDto;
 import me.zhengjie.modules.mskj.service.dto.DeviceQueryCriteria;
 import me.zhengjie.modules.mskj.service.mapstruct.DeviceMapper;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import cn.hutool.core.util.IdUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
-import java.util.List;
-import java.util.Map;
-import java.io.IOException;
+import me.zhengjie.utils.ValidationUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
-* @website https://el-admin.vip
-* @description 服务实现
-* @author Fu Ding
-* @date 2020-10-30
-**/
+ * @author Fu Ding
+ * @website https://el-admin.vip
+ * @description 服务实现
+ * @date 2020-10-30
+ **/
 @Service
 @RequiredArgsConstructor
 public class DeviceServiceImpl implements DeviceService {
@@ -52,28 +53,28 @@ public class DeviceServiceImpl implements DeviceService {
     private final DeviceMapper deviceMapper;
 
     @Override
-    public Map<String,Object> queryAll(DeviceQueryCriteria criteria, Pageable pageable){
-        Page<Device> page = deviceRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+    public Map<String, Object> queryAll(DeviceQueryCriteria criteria, Pageable pageable) {
+        Page<Device> page = deviceRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable);
         return PageUtil.toPage(page.map(deviceMapper::toDto));
     }
 
     @Override
-    public List<DeviceDto> queryAll(DeviceQueryCriteria criteria){
-        return deviceMapper.toDto(deviceRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+    public List<DeviceDto> queryAll(DeviceQueryCriteria criteria) {
+        return deviceMapper.toDto(deviceRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public DeviceDto findById(String deviceId) {
         Device device = deviceRepository.findById(deviceId).orElseGet(Device::new);
-        ValidationUtil.isNull(device.getDeviceId(),"Device","deviceId",deviceId);
+        ValidationUtil.isNull(device.getDeviceId(), "Device", "deviceId", deviceId);
         return deviceMapper.toDto(device);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public DeviceDto create(Device resources) {
-        resources.setDeviceId(IdUtil.simpleUUID()); 
+        resources.setDeviceId(IdUtil.simpleUUID());
         return deviceMapper.toDto(deviceRepository.save(resources));
     }
 
@@ -81,9 +82,19 @@ public class DeviceServiceImpl implements DeviceService {
     @Transactional(rollbackFor = Exception.class)
     public void update(Device resources) {
         Device device = deviceRepository.findById(resources.getDeviceId()).orElseGet(Device::new);
-        ValidationUtil.isNull( device.getDeviceId(),"Device","id",resources.getDeviceId());
+        ValidationUtil.isNull(device.getDeviceId(), "Device", "id", resources.getDeviceId());
         device.copy(resources);
         deviceRepository.save(device);
+    }
+
+    @Override
+    public boolean claimChargingPile(String deviceId) {
+        return deviceRepository.updateChargingPileStatus(deviceId, 1, 0) == 1;
+    }
+
+    @Override
+    public boolean freeChargingPile(String deviceId) {
+        return deviceRepository.updateChargingPileStatus(deviceId, 0, 2) == 1;
     }
 
     @Override
@@ -97,7 +108,7 @@ public class DeviceServiceImpl implements DeviceService {
     public void download(List<DeviceDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
         for (DeviceDto device : all) {
-            Map<String,Object> map = new LinkedHashMap<>();
+            Map<String, Object> map = new LinkedHashMap<>();
             map.put("巡检设备名称", device.getDeviceName());
             map.put("设备编号", device.getDeviceNo());
             map.put("巡检设备坐标（x,y）", device.getDeviceLocation());
@@ -140,16 +151,16 @@ public class DeviceServiceImpl implements DeviceService {
             map.put("是否三相设备（0是，默认1否）", device.getThreePhase());
             map.put("创建时间", device.getCreateTime());
             map.put("描述", device.getDescription());
-            map.put(" centerLocation",  device.getCenterLocation());
+            map.put(" centerLocation", device.getCenterLocation());
             map.put("充电桩状态(0表示可用，1表示预约，2表示占用，3表示维修）", device.getChargingPileStatus());
             map.put("经纬度", device.getLongitudeLatitude());
             map.put("巡检位置", device.getInspectLocation());
             map.put("充电桩状态（0表示空闲，1表示已预约，2表示充电中，3表示异常）", device.getChargingStatus());
-            map.put(" multichartAnnotation",  device.getMultichartAnnotation());
-            map.put(" listsNum",  device.getListsNum());
-            map.put(" scaleLists",  device.getScaleLists());
-            map.put(" angleLists",  device.getAngleLists());
-            map.put(" deviceSum",  device.getDeviceSum());
+            map.put(" multichartAnnotation", device.getMultichartAnnotation());
+            map.put(" listsNum", device.getListsNum());
+            map.put(" scaleLists", device.getScaleLists());
+            map.put(" angleLists", device.getAngleLists());
+            map.put(" deviceSum", device.getDeviceSum());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

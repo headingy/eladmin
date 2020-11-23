@@ -19,10 +19,11 @@ import me.zhengjie.modules.mskj.domain.Device;
 import me.zhengjie.modules.mskj.service.dto.DeviceDto;
 import me.zhengjie.modules.mskj.service.dto.DeviceQueryCriteria;
 import org.springframework.data.domain.Pageable;
-import java.util.Map;
-import java.util.List;
-import java.io.IOException;
+
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @website https://el-admin.vip
@@ -66,6 +67,13 @@ public interface DeviceService {
     * @param resources /
     */
     void update(Device resources);
+
+    /**
+     * 预约充电桩
+     * @param deviceId /
+     */
+    boolean claimChargingPile(String deviceId);
+    boolean freeChargingPile(String deviceId);
 
     /**
     * 多选删除

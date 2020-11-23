@@ -116,4 +116,19 @@ public class Cache {
         return MessageFormat.format("robot:{0}:charge:taskId", taskId);
     }
 
+    public String getRobotUnreachable(String robotId) {
+        String key = getRobotUnreachableKey(robotId);
+        return (String) redisUtils.get(key);
+
+    }
+    public void updateRobotUnreachable(String robotId, String deviceId) {
+        String key = getRobotUnreachableKey(deviceId);
+        log.debug("cache {} set to {}, expire in {} seconds", key, deviceId);
+        redisUtils.set(key, deviceId);
+    }
+
+    private String getRobotUnreachableKey(String deviceId) {
+        return MessageFormat.format("robot:{0}:charge:unreachableDeviceId", deviceId);
+    }
+//    public String getFileId()
 }

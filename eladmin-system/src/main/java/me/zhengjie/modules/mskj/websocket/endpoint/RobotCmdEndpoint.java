@@ -107,6 +107,7 @@ public class RobotCmdEndpoint {
      */
     public void sendMessage(Session session, String robotId, String message) throws IOException {
         if (message == null) return;
+        //TODO can we better put a traceId into the message body?
         session.getBasicRemote().sendText(message);
         log.info("message sent to robot {}: {}", robotId, message);
     }
